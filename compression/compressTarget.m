@@ -62,7 +62,7 @@ while isCompressive
     bestInd = -1;
     
     % make a string version of compVec for the search in the loop
-    dataString = [' ' sprintf('%1d ', compVec)];
+    dataString = ['  ' sprintf('%1d  ', compVec)];
     
     % check each rule in the grammar and take most compressive
     for ii = 1:size(grammar, 1)
@@ -75,8 +75,14 @@ while isCompressive
             
             % get the non-overlapping counts of the current n-gram. Pad
             % uniqueNGrams with spaces to avoid matches like: '76 7'
-            % matching '76 78' in dataString.
-            currentString = [' ' sprintf('%1d ', currentSequence)];
+            % matching '76 78' in dataString.  Each element of compVec is
+            % separated by two spaces, so separate each element of the 
+            % current n-gram with two spaces but only pad with one on 
+            % either side.  This allows overlaps to be correctly counted.  
+            % E.g. ' 2  2 ' will be found twice in '12  2  2  2  2  22  5' 
+            % as it should be.
+            currentString = [' ' sprintf('%1d  ', currentSequence)];
+            currentString = currentString(1:end-1);
             count = numel( regexp(dataString, currentString) );
             
             % calculate the savings of the current element
