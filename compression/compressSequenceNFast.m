@@ -104,6 +104,22 @@ while ~isempty(sequence)
     compVec(isnan(compVec)) = [];
     
     newInd = newInd + 1;
+    
+    % check that compressed lengths, savings, and grammar size are
+    % consistent
+    if ~isempty(sequence) % on last iteration last grammar entry is empty
+        if length(compVec) + totSavings + size(grammar, 1) + ...
+                sum(cellfun(@length, grammar(:, 2))) ~= length(dataVec)
+            error(['Calculated savings not consistent with original' ...
+                ' and compressed lengths and grammar size.'])
+        end
+    else
+        if length(compVec) + totSavings + size(grammar, 1) - 1 + ...
+                sum(cellfun(@length, grammar(:, 2))) ~= length(dataVec)
+            error(['Calculated savings not consistent with original' ...
+                ' and compressed lengths and grammar size.'])
+        end
+    end
 end
 
 % remove the last (empty) entry of the grammar

@@ -74,8 +74,8 @@ end
 bestSavings = 0;
 sequence = [];
 
-% convert dataVec to a string with single spaces between entries
-dataString = [' ' sprintf('%1d ', dataVec)];
+% convert dataVec to a string with double spaces between entries
+dataString = ['  ' sprintf('%1d  ', dataVec)];
 
 % loop through n-grams
 for nn = 2:nMax
@@ -117,9 +117,13 @@ for nn = 2:nMax
             
             % get the non-overlapping counts of the current n-gram. Pad
             % uniqueNGrams with spaces to avoid matches like: '76 7' matching
-            % '76 78' in dataString.
-            %         nGramString = [' ' sprintf('%1d ', uniqueNGrams(sortInds(ii), :))];
-            nGramString = sprintf('%1d ', uniqueNGrams(sortInds(ii), :));
+            % '76 78' in dataString.  Each element of dataVec is separated
+            % by two spaces, so separate each element of the current n-gram
+            % with two spaces but only pad with one on either side.  This
+            % allows overlaps to be correctly counted.  E.g. ' 2  2 ' will
+            % be found twice in '12  2  2  2  2  22  5' as it should be.
+            nGramString = [' ' sprintf('%1d  ', uniqueNGrams(sortInds(ii), :))];
+            nGramString = nGramString(1:end-1);
             countNoOverlaps = numel( regexp(dataString, nGramString) );
             
             % check if you have gotten to the last possible n-gram
