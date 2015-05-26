@@ -89,7 +89,8 @@ for nn = 2:nMax
     
     % check if there is only 1 unique n-gram (a repeated sequence
     if size(uniqueNGrams, 1) == 1
-        nGramString = sprintf('%1d ', uniqueNGrams);
+        nGramString = [' ' sprintf('%1d  ', uniqueNGrams)];
+        nGramString = nGramString(1:end-1);
         bestCount = numel( regexp(dataString, nGramString) );
         bestNGram = uniqueNGrams;
     else
