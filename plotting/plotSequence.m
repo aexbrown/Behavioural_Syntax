@@ -86,7 +86,8 @@ for jj = 1:length(sequence)
     
     % mark the head
     line(x(1) - mean(x) + jj * offsetFactor + offsetX, ...
-        y(1) - mean(y) + offsetY, 'Color', headColor, 'LineWidth', width*2)
+        y(1) - mean(y) + offsetY, ...
+        'Marker', 'o', 'MarkerFaceColor', headColor, 'MarkerSize', width*2)
 end
 ylim([-0.6, 0.6])
 axis equal
