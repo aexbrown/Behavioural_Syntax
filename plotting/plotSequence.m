@@ -85,9 +85,9 @@ for jj = 1:length(sequence)
         y - mean(y) + offsetY, 'Color', bodyColor, 'LineWidth', width)
     
     % mark the head
-    line(x(1) - mean(x) + jj * offsetFactor + offsetX, ...
+    plot(x(1) - mean(x) + jj * offsetFactor + offsetX, ...
         y(1) - mean(y) + offsetY, ...
-        'Marker', 'o', 'MarkerFaceColor', headColor, 'MarkerSize', width*2)
+        '.', 'MarkerSize', width*15, 'Color', headColor)
 end
 ylim([-0.6, 0.6])
 axis equal
