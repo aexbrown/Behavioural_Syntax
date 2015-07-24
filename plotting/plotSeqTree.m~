@@ -1,0 +1,67 @@
+function plotSeqTree(compVec, gExp)
+
+% PLOTSEQTREE plots a tree structure indicating how the elements of gExp
+% relate to each other.  compVec is also required so that the branches of
+% the tree can be labelled with the number of occurances of the
+% sub-sequences that we used to generate the tree when the original
+% sequence was compressed.
+% 
+% Input
+%   compVec      - the compressed vector
+%   gExp         - a number of rules by 1 cell array.  It is the expanded
+%                  version of the input grammar obtained by applying the rules
+%                  encoded in the grammar.  It contains the progressively
+%                  expanded version of each of the rules in the grammar.  For
+%                  any given entry gExp{ii}{end} contains only terminal
+%                  symbols.
+
+% loop through gExp
+for ii = 1:size(gExp, 1)
+    figure
+    xlim([0, numel(gExp{ii}{end}) + 1])
+    ylim([0, numel(gExp{ii}{end}) + 1.5])
+    
+    % first plot the state labels of the terminal indices
+    for jj = 1:numel(gExp{ii}{end})
+        text(jj, 0.5, num2str(gExp{ii}{end}(jj)), ...
+            'HorizontalAlignment', 'center', 'FontSize', 20)
+    end
+    
+    % loop to higher levels in gExp starting from the terminals
+    xCoords = 1:numel(gExp{ii}{end});
+    y = 0;
+    for jj = numel(gExp{ii}):-1:2
+        % shift the y level
+        y = y + 1;
+        
+        % plot vertical lines
+        for kk = 1:numel(xCoords)
+            line([xCoords(kk), xCoords(kk)], [y, y+1], 'LineWidth', 3)
+        end
+        
+        % find the location of the new state following the merge and the
+        % length difference of the sequence before and after merging
+        newState = setdiff(gExp{ii}{jj-1}, gExp{ii}{jj});
+        mergeStart = ...
+            find(gExp{ii}{jj-1} == newState);
+        lengthDiff = numel(gExp{ii}{jj}) - numel(gExp{ii}{jj-1});
+        
+        % draw the horizontal line
+        line([xCoords(mergeStart), xCoords(mergeStart + lengthDiff)], ...
+            [y+1, y+1], 'LineWidth', 3)
+        
+        % add text indicating the number of times the sequence
+        % corresponding to the current branch was found in the grammar
+        termInds = getTerminalInds(compVec, gExp, newState);
+        number  = sum(termInds);
+        
+        % update x coordinates
+        newX = xCoords(mergeStart) + (xCoords(mergeStart + lengthDiff) - xCoords(mergeStart))/2; 
+        xCoords(mergeStart:mergeStart + lengthDiff) = newX;
+        xCoords = unique(xCoords);
+    end
+    
+    % add a final vertical line
+    xFinal = xCoords(1) + (xCoords(end) - xCoords(1))/2;
+    line([xFinal, xFinal], [y+1, y+2], 'LineWidth', 3)
+end

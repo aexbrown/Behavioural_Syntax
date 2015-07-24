@@ -78,3 +78,6 @@ end
 
 % find the indices of the given non-terminal
 terminalInds = parentRepVec == -nonTerminal;
+
+% turn warning back on
+warning('on','MATLAB:strrep:InvalidInputType')
