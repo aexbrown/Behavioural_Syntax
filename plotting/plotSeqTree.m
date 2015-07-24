@@ -42,26 +42,38 @@ for jj = numel(gExp{ind}):-1:2
     % find the location of the new state following the merge and the
     % length difference of the sequence before and after merging
     newState = setdiff(gExp{ind}{jj-1}, gExp{ind}{jj});
-    mergeStart = ...
+    mergeStarts = ...
         find(gExp{ind}{jj-1} == newState);
-    lengthDiff = numel(gExp{ind}{jj}) - numel(gExp{ind}{jj-1});
+    lengthDiff = (numel(gExp{ind}{jj}) - numel(gExp{ind}{jj-1})) / ...
+       numel(mergeStarts);
     
-    % draw the horizontal line
-    line([xCoords(mergeStart), xCoords(mergeStart + lengthDiff)], ...
-        [y+1, y+1], 'LineWidth', 3)
+    % draw the horizontal lines
+    indShift = 0;
+    for kk = 1:numel(mergeStarts)
+        % every merged state shifts subsequent starts lengthDiff to the 
+        % right.
+        line([xCoords(mergeStarts(kk) + indShift), ...
+            xCoords(mergeStarts(kk) + indShift + lengthDiff)], ...
+            [y+1, y+1], 'LineWidth', 3)
+        indShift = indShift + 1;
+    end
     
     % update x coordinates
-    newX = xCoords(mergeStart) + (xCoords(mergeStart + lengthDiff) - xCoords(mergeStart))/2;
-    xCoords(mergeStart:mergeStart + lengthDiff) = newX;
-    xCoords = unique(xCoords);
+    for kk = 1:numel(mergeStarts)
+        newX = xCoords(mergeStarts(kk)) + (xCoords(mergeStarts(kk) + lengthDiff) - xCoords(mergeStarts(kk)))/2;
+        xCoords(mergeStarts(kk):mergeStarts(kk) + lengthDiff) = newX;
+        xCoords = unique(xCoords);
+    end
     
     % add text indicating the number of times the sequence
     % corresponding to the current branch was found during compression
     termInds = getTerminalInds(compVec, gExp, newState);
     newStateCounts = sum(termInds);
     
-    text(newX+0.1, y+1.2, num2str(newStateCounts), ...
-        'FontSize', 20, 'Color', 'r', 'HorizontalAlignment', 'left')
+    for kk = 1:numel(mergeStarts)
+        text(xCoords(kk)+0.1, y+1.2, num2str(newStateCounts), ...
+            'FontSize', 20, 'Color', 'r', 'HorizontalAlignment', 'left')
+    end
 end
 
 % add a final vertical line
