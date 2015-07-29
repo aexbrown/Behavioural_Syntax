@@ -71,7 +71,7 @@ for jj = numel(gExp{ind}):-1:2
     newStateCounts = sum(termInds);
     
     for kk = 1:numel(mergeStarts)
-        text(xCoords(kk)+0.1, y+1.2, num2str(newStateCounts), ...
+        text(xCoords(mergeStarts(kk))+0.1, y+1.2, num2str(newStateCounts), ...
             'FontSize', 20, 'Color', 'r', 'HorizontalAlignment', 'left')
     end
 end
