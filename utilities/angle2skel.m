@@ -1,4 +1,4 @@
-function [skelX skelY] = angle2skel(angleArray, meanAngle, arclength)
+function [skelX, skelY] = angle2skel(angleArray, meanAngle, arclength)
 
 % ANGLE2SKEL Take in an angle array and integrate over the angles to get
 % back a skeleton.  NB: This reconstruction assumes each segment was
@@ -34,11 +34,15 @@ skelY = NaN(numAngles + 1, numFrames);
 for ii = 1:numFrames
     % add up x-contributions of angleArray, rotated by meanAngle
     skelX(:, ii) = [0; cumsum(cos( angleArray(:, ii) + meanAngle(ii) ) * ...
-        arclength/(numAngles + 1)) ];
+        arclength/numAngles) ];
     
     % add up y-contributions of angleArray, rotated by meanAngle
     skelY(:, ii) = [0; cumsum(sin( angleArray(:, ii) + meanAngle(ii) ) * ...
-        arclength/(numAngles + 1)) ];
+        arclength/numAngles) ];
 end
 
+% % calculate actual acrlength
+% segLength = sum(sqrt(diff(skelX).^2 + diff(skelY).^2));
+% disp(segLength)
+% disp(arclength)
 
