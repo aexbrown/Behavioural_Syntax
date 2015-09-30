@@ -69,9 +69,9 @@ while any(parentRepVec >= gExp{1}{1})
     % negative copies of itself (the negative is just to ensure the values
     % are less than gExp{1}{1} so that the while loop continues)
     if maxNT == nonTerminal
-        ruleLength = numel(gExp{maxNT - gExp{1}{1} + 1}{end});
+        ruleLength = numel(gExp{maxNT - gExp{1}{1} + 1}{end}));
         parentRepVec = ...
-            strrep(parentRepVec, maxNT, repmat(-maxNT, 1, ruleLength));
+            strrep(parentRepVec, maxNT, repmat(-maxNT, 1, ruleLength);
     else
         % this is not the non-terminal we're searching for.  Expand it by
         % one level and continue search.

@@ -30,6 +30,7 @@ end
 % loop to higher levels in gExp starting from the terminals
 xCoords = 1:numel(gExp{ind}{end});
 y = 0;
+ruleLength = 0;
 for jj = numel(gExp{ind}):-1:2
     % shift the y level
     y = y + 1;
@@ -45,6 +46,9 @@ for jj = numel(gExp{ind}):-1:2
     mergeStarts = find(gExp{ind}{jj-1} == newState);
     lengthDiff = (numel(gExp{ind}{jj}) - numel(gExp{ind}{jj-1})) / ...
         numel(mergeStarts);
+    
+    % update the length of the current total rule
+    ruleLength = ruleLength + (lengthDiff / mergeStarts);
     
     % draw the horizontal lines
     indShift = 0;
@@ -66,8 +70,8 @@ for jj = numel(gExp{ind}):-1:2
     
     % add text indicating the number of times the sequence
     % corresponding to the current branch was found during compression
-    [termInds, ruleLength] = getTerminalInds(compVec, gExp, newState);
-    newStateCounts = sum(termInds) / ruleLength;
+    termInds = getTerminalInds(compVec, gExp, newState);
+    newStateCounts = sum(termInds);
     
     for kk = 1:numel(mergeStarts)
         text(xCoords(mergeStarts(kk))+0.1, y+1.2, num2str(newStateCounts), ...
