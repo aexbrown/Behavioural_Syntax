@@ -23,6 +23,8 @@ ylim([0, numel(gExp{ind}{end}) + 1.5])
 
 % first plot the state labels of the terminal indices
 for jj = 1:numel(gExp{ind}{end})
+%     text(jj, 0.5, char(gExp{ind}{end}(jj)), ...
+%         'HorizontalAlignment', 'center', 'FontSize', 20)
     text(jj, 0.5, num2str(gExp{ind}{end}(jj)), ...
         'HorizontalAlignment', 'center', 'FontSize', 20)
 end
