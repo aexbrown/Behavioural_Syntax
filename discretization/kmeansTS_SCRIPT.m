@@ -16,9 +16,7 @@ directory = '/Users/abrown/Andre/wormVideos/results-12-05-10/';
 
 % ---------------------------- Set Parameters -----------------------------
 minFrames = 10000; % the minimum number of acceptable frames in a file
-fileNum = 20; % the number of random files to process.  N.B. if fileNum is
-% >= to the number of files in fileList, then the script
-% will simply run deterministically on all files in the list
+% fileNum = 20; !!! fileNum is set below in the loop !!!
 frameNum = 5000; % the number of random frames to take per file
 k = 90; % the number of centres to use for k-means clustering
 % -------------------------------------------------------------------------
@@ -71,6 +69,11 @@ uniqueNames = unique(wormNames);
 for kk = 1:numel(uniqueNames)
     disp(kk/numel(uniqueNames))
     
+    % reset fileNum.  N.B. if fileNum is >= to the number of files in 
+    % fileList, then the script will simply run deterministically on all 
+    % files in the list
+    fileNum = 20;
+    
     % get the indices of the current strain
     currentNameInds = find(strcmp(wormNames, uniqueNames(kk)));
     
@@ -99,7 +102,11 @@ for kk = 1:numel(uniqueNames)
         else
             fileInd = currentNameInds(ii);
             angleArray = cell2mat(struct2cell(load(fileList{fileInd})));
+            if sum(~isnan(angleArray(:, 1))) < 2
+                continue
+            end
         end
+        
         % instead of dropping NaN values, interpolate over NaNs
         % initialise anglesNoNaN
         anglesNoNaN = angleArray;

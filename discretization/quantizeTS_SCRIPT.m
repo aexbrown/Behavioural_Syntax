@@ -19,11 +19,12 @@ directory = '/Users/abrown/Andre/wormVideos/results-12-05-10/';
 %     'Laura Grundy/npr-1/'];
 % directory = ['/Users/abrown/Andre/wormVideos/results-12-05-10/'...
 %     'wild-isolates/CB4856/'];
+postureDir = '/Users/abrown/Andre/wormVideos/results-12-05-10/postures/';
 
 
 % get the list of files (includes data from mutant classes)
 [fileList, ~] = dirSearch(directory, 'angleArray.mat');
-fileStructPostures = dir(directory);
+fileStructPostures = dir(postureDir);
 
 % exclude "no_wait" data
 dropInds = [];
@@ -72,7 +73,7 @@ for kk = 1:numel(uniqueNames)
             ~isempty(strfind(fileStructPostures(ii).name, ...
                 ['postures_' num2str(postureNum)]))
             % load the postures file
-            load([directory, fileStructPostures(ii).name])
+            load([postureDir, fileStructPostures(ii).name])
             postures = postures';
             continue
         end

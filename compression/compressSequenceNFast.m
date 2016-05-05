@@ -87,7 +87,7 @@ sequence = NaN;
 newInd = newStart;
 ii = 1;
 while ~isempty(sequence)
-    disp(length(compVec)/length(dataVec))
+%     disp(length(compVec)/length(dataVec))
     
     % find the most compressive sequence in dataVec
     [sequence, locations, savings] = compressiveNFast(compVec, nMax);
