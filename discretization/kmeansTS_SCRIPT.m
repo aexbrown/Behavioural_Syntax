@@ -6,7 +6,7 @@
 clear angleTotal
 
 % set the root directory
-directory = '/Users/abrown/Andre/wormVideos/results-12-05-10/';
+% directory = '/Users/abrown/Andre/wormVideos/results-12-05-10/';
 % directory = ['/Users/abrown/Andre/wormVideos/results-12-05-10/'...
 %     'Laura Grundy/gene_NA/allele_NA/N2/on_food/XX/30m_wait/'];
 % directory = ['/Users/abrown/Andre/wormVideos/results-12-05-10/' ...

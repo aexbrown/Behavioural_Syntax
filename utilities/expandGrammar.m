@@ -85,6 +85,5 @@ for ii = size(grammar, 1):-1:1
     end
 end
 
-% while any(compVec >= 151)
-%     compVec = strrep(compVec, max(compVec), gExp{max(compVec) - 151 + 1}{end});
-% end
+% turn warning back on
+warning('on','MATLAB:strrep:InvalidInputType')

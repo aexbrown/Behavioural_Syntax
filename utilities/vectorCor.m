@@ -1,6 +1,6 @@
 function Rmat = vectorCor(mat1, mat2)
 
-% VECTORR2 calculates the correlation coefficient between the rows of mat1
+% VECTOR calculates the correlation coefficient between the rows of mat1
 % and mat2 and returns the result as a matrix (analogous to a distance
 % matrix).
 % 

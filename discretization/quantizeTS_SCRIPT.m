@@ -19,12 +19,15 @@ directory = '/Users/abrown/Andre/wormVideos/results-12-05-10/';
 %     'Laura Grundy/npr-1/'];
 % directory = ['/Users/abrown/Andre/wormVideos/results-12-05-10/'...
 %     'wild-isolates/CB4856/'];
-postureDir = '/Users/abrown/Andre/wormVideos/results-12-05-10/postures/';
+% postureDir = '/Users/abrown/Andre/wormVideos/results-12-05-10/postures/';
 
+% load postures
+load('/Users/abrown/Andre/wormVideos/results-12-05-10/postures/N2_herm-derived-postures_90-centers_20-files_5000-framesPerFile.mat')
+postures = postures';
 
 % get the list of files (includes data from mutant classes)
 [fileList, ~] = dirSearch(directory, 'angleArray.mat');
-fileStructPostures = dir(postureDir);
+% fileStructPostures = dir(postureDir);
 
 % exclude "no_wait" data
 dropInds = [];
@@ -54,7 +57,7 @@ for ii = 1:numel(fileList)
     % get the string with the strain or mutant/allele name
     wormName = fileList{ii}(slashPositions(7)+1:slashPositions(9)-1);
     
-    %  remove '/on_food/' (present in wild isolate names and replace
+    % remove '/on_food/' (present in wild isolate names and replace
     % slashes with underscores
     wormName = strrep(wormName, '/on_food', '');
     wormName = strrep(wormName, '/', '_');
@@ -66,18 +69,18 @@ uniqueNames = unique(wormNames);
 
 
 % loop through unique names
-for kk = 1:numel(uniqueNames)    
-    for ii = 1:numel(fileStructPostures)
-        % check for a match with the current strain name
-        if ~isempty(strfind(fileStructPostures(ii).name, uniqueNames{kk})) && ...
-            ~isempty(strfind(fileStructPostures(ii).name, ...
-                ['postures_' num2str(postureNum)]))
-            % load the postures file
-            load([postureDir, fileStructPostures(ii).name])
-            postures = postures';
-            continue
-        end
-    end
+for kk = 27:numel(uniqueNames)    
+%     for ii = 1:numel(fileStructPostures)
+%         % check for a match with the current strain name
+%         if ~isempty(strfind(fileStructPostures(ii).name, uniqueNames{kk})) && ...
+%             ~isempty(strfind(fileStructPostures(ii).name, ...
+%                 ['postures_' num2str(postureNum)]))
+%             % load the postures file
+%             load([postureDir, fileStructPostures(ii).name])
+%             postures = postures';
+%             continue
+%         end
+%     end
     
     % get the indices of the current strain
     currentNameInds = find(strcmp(wormNames, uniqueNames(kk)));
@@ -156,13 +159,23 @@ for kk = 1:numel(uniqueNames)
             end
             
             % save the state sequence
-            statesFileName = [num2str(currentNameInds(ii)) ...
-                '_stateSequence_' num2str(postureNum) 'means_' ...
-                uniqueNames{kk} '-' num2str(warpNum) ...
-                '_ds-' num2str(ds)];
-            statesFileName = ...
-                strrep(fileList{currentNameInds(ii)}, 'angleArray', statesFileName);
-            save(statesFileName, 'stateSequence')
+%             statesFileName = [num2str(currentNameInds(ii)) ...
+%                 '_stateSequence_' num2str(postureNum) 'means_' ...
+%                 uniqueNames{kk} '-' num2str(warpNum) ...
+%                 '_ds-' num2str(ds)];
+%             statesFileName = ...
+%                 strrep(fileList{currentNameInds(ii)}, 'angleArray', statesFileName);
+%             save(statesFileName, 'stateSequence')
+
+            save(['/Users/abrown/Andre/wormVideos/results-12-05-10/posture_sequences/' ...
+                num2str(ii) '_' wormNames{currentNameInds(ii)} '_stateSequence_90-N2-means_ds-5.mat'], 'stateSequence')
+
+%             statesFileName = [num2str(currentNameInds(ii)) ...
+%                 '_stateSequence_' num2str(postureNum) 'means_N2-' ...
+%                 num2str(warpNum) '_ds-' num2str(ds)];
+%             statesFileName = ...
+%                 strrep(fileList{currentNameInds(ii)}, 'angleArray', statesFileName);
+%             save(statesFileName, 'stateSequence')
         catch
             disp(['bad file name: ' fileList{currentNameInds(ii)}])
         end
