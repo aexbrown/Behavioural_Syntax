@@ -37,7 +37,7 @@ function [sequence, locations, bestSavings] = ...
 %                 takes into account the size of the rule that is created)
 % 
 % Copyright Medical Research Council 2013
-% André Brown, andre.brown@csc.mrc.ac.uk, aexbrown@gmail.com
+% Andre Brown, andre.brown@csc.mrc.ac.uk, aexbrown@gmail.com
 % 
 % 
 % The MIT License
@@ -87,7 +87,7 @@ for nn = 2:nMax
     % check for overlaps below
     [uniqueNGrams, countOverlaps] = countUniqueRows(nGrams);
     
-    % check if there is only 1 unique n-gram (a repeated sequence
+    % check if there is only 1 unique n-gram (a repeated sequence)
     if size(uniqueNGrams, 1) == 1
         nGramString = [' ' sprintf('%1d  ', uniqueNGrams)];
         nGramString = nGramString(1:end-1);
@@ -126,7 +126,6 @@ for nn = 2:nMax
             nGramString = [' ' sprintf('%1d  ', uniqueNGrams(sortInds(ii), :))];
             nGramString = nGramString(1:end-1);
             countNoOverlaps = numel( regexp(dataString, nGramString) );
-            
             % check if you have gotten to the last possible n-gram
             if ii == numel(sortInds)
                 % this means none of the previous n-grams was best.  This is
@@ -139,16 +138,23 @@ for nn = 2:nMax
             
             % check if the counts without overlaps of the current n-gram is the
             % highest of any n-gram.
-            if countNoOverlaps >= countOverlaps(sortInds(ii + 1))
+            
+            if countNoOverlaps < previousBest && (countNoOverlaps >= countOverlaps(sortInds(ii +1)))
+                bestNGram = uniqueNGrams(sortInds(previousBestInd), :);
+                bestCount = previousBest;
+                break
+            elseif countNoOverlaps >= countOverlaps(sortInds(ii +1))
                 % this is the most frequent n-gram
                 bestNGram = uniqueNGrams(sortInds(ii), :);
                 bestCount = countNoOverlaps;
                 break
                 % check if it is better than the previous best
-            elseif countNoOverlaps > previousBest
+            else
                 previousBest = countNoOverlaps;
                 previousBestInd = ii;
             end
+
+            
         end
         
         % for testing, check all unique N-grams and take best over all.
