@@ -135,22 +135,37 @@ for nn = 2:nMax
                 break
             end
             
-            % check if the counts without overlaps of the current n-gram is the
-            % highest of any n-gram.
-            
-            if countNoOverlaps < previousBest && (countNoOverlaps >= countOverlaps(sortInds(ii + 1)))
-                bestNGram = uniqueNGrams(sortInds(previousBestInd), :);
-                bestCount = previousBest;
-                break
-            elseif countNoOverlaps >= countOverlaps(sortInds(ii + 1))
-                % this is the most frequent n-gram
-                bestNGram = uniqueNGrams(sortInds(ii), :);
-                bestCount = countNoOverlaps;
-                break
-                % check if it is better than the previous best
+            % check if the current n-gram is worse than the previous best
+            if countNoOverlaps < previousBest
+                % check if the current n-gram is better than the upper
+                % bound on the next n-gram
+                if countNoOverlaps >= countOverlaps(sortInds(ii + 1))
+                    % the previous best is the best overall
+                    bestNGram = uniqueNGrams(sortInds(previousBestInd), :);
+                    bestCount = previousBest;
+                    break
+                else
+                    % the current n-gram is not the best, but we still need
+                    % to check the next n-gram in case its countsNoOverlaps
+                    % is better than the previousBest
+                    continue
+                end
             elseif countNoOverlaps >= previousBest
-                previousBest = countNoOverlaps;
-                previousBestInd = ii;
+                % check if the current n-gram is better than the upper
+                % bound of the next n-gram
+                if countNoOverlaps >= countOverlaps(sortInds(ii + 1))
+                    % the current n-gram is the best overall
+                    bestNGram = uniqueNGrams(sortInds(ii), :);
+                    bestCount = countNoOverlaps;
+                    break
+                else
+                    % the current n-gram is as good or better than the 
+                    % previous best, but we still need to check the next
+                    % n-gram in case its countsNoOverlaps is better than
+                    % the current n-gram
+                    previousBest = countNoOverlaps;
+                    previousBestInd = ii;
+                end
             end
         end
         
