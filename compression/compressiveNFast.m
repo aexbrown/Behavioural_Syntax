@@ -36,8 +36,7 @@ function [sequence, locations, bestSavings] = ...
 %   bestSavings - the compression achieved by making the replacements (this
 %                 takes into account the size of the rule that is created)
 % 
-% Copyright Medical Research Council 2013
-% Andre Brown, andre.brown@csc.mrc.ac.uk, aexbrown@gmail.com
+% Andre Brown, andre.brown@lms.mrc.ac.uk, aexbrown@gmail.com
 % 
 % 
 % The MIT License
@@ -139,38 +138,35 @@ for nn = 2:nMax
             % check if the counts without overlaps of the current n-gram is the
             % highest of any n-gram.
             
-            if countNoOverlaps < previousBest && (countNoOverlaps >= countOverlaps(sortInds(ii +1)))
+            if countNoOverlaps < previousBest && (countNoOverlaps >= countOverlaps(sortInds(ii + 1)))
                 bestNGram = uniqueNGrams(sortInds(previousBestInd), :);
                 bestCount = previousBest;
                 break
-            elseif countNoOverlaps >= countOverlaps(sortInds(ii +1))
+            elseif countNoOverlaps >= countOverlaps(sortInds(ii + 1))
                 % this is the most frequent n-gram
                 bestNGram = uniqueNGrams(sortInds(ii), :);
                 bestCount = countNoOverlaps;
                 break
                 % check if it is better than the previous best
-            else
+            elseif countNoOverlaps >= previousBest
                 previousBest = countNoOverlaps;
                 previousBestInd = ii;
             end
-
-            
         end
         
-        % for testing, check all unique N-grams and take best over all.
-        % Make sure it's the same as that found above
-        %     nGramsTest = n_grams(dataString, nn);
-        %     [uniqueNGramsTest, ~] = countUniqueStr(nGramsTest);
-        %     counts = NaN(numel(uniqueNGramsTest), 1);
-        %     for ii = 1:numel(uniqueNGramsTest)
-        %         counts(ii) = numel( regexp(dataString, ...
-        %             [' ' uniqueNGramsTest{ii} ' ']) );
-        %     end
-        %     if max(counts) ~= bestCount
-        %         error('brute force does not agree with early abandon solution')
-        %     end
-        
+%         % for testing, check all unique N-grams and take best over all.
+%         % Make sure it's the same as that found above
+%         counts = NaN(size(uniqueNGrams, 1), 1);
+%         for jj = 1:size(uniqueNGrams, 1)
+%             nGramString = [' ' sprintf('%1d  ', uniqueNGrams(jj, :))];
+%             nGramString = nGramString(1:end-1);
+%             counts(jj) = numel( regexp(dataString, nGramString) );
+%         end
+%         if max(counts) ~= bestCount
+%             error('brute force does not agree with early abandon solution')
+%         end
     end
+    
     % calculate the savings of using the current best n-gram for
     % compression
     savings = (nn - 1) * (bestCount - 1) - 2;
